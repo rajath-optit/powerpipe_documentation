@@ -37,13 +37,12 @@ bashCopy codeecho 'export AWS_PROFILE=account1' >> ~/.bashrc
 For user2:
 bashCopy codeecho 'export AWS_PROFILE=account2' >> ~/.bashrc
  
-bashCopy codesu - user2
-bashCopy codesu - user1
+bashCopy code su - user2
+bashCopy code su - user1
 bashCopy codeexport AWS_PROFILE=account2
 bashCopy codeaws configure --profile account2
 bashCopy codesu - user2
 bashCopy codeexport AWS_PROFILE=account1
 bashCopy codeaws configure --profile account1
 bashCopy codesu - user1
- 
  
