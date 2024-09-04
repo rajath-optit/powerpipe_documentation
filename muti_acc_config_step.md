@@ -68,9 +68,9 @@ To configure AWS credentials and Steampipe connections based on the examples you
 
        [cli_user]
 
-       aws_access_key_id = AKIA4YFAKEKEYXTDS252
+       aws_access_key_id = 52
 
-       aws_secret_access_key = SH42YMW5p3EThisIsNotRealzTiEUwXN8BOIOF5J8m
+       aws_secret_access_key = F5J8m
  
        [account_a_role_without_mfa]
 
@@ -128,17 +128,17 @@ To configure AWS credentials and Steampipe connections based on the examples you
 
        [account_a]
 
-       aws_access_key_id = AKIA4YFAKEKEYXTDS252
+       aws_access_key_id = AKS252
 
-       aws_secret_access_key = SH42YMW5p3EThisIsNotRealzTiEUwXN8BOIOF5J8m
+       aws_secret_access_key = SH42YMWN8BOIOF5J8m
 
        region = us-west-2
  
        [account_b]
 
-       aws_access_key_id = AKIA4YFAKEKEYJ7HS98F
+       aws_access_key_id = AKIS98F
 
-       aws_secret_access_key = Apf938vDKd8ThisIsNotRealzTiEUwXj9nKLWP9mg4
+       aws_secret_access_key = Apf938nKLWP9mg4
 
        ```
 
@@ -383,15 +383,15 @@ To test the setup and confirm that using multiple AWS accounts in one terminal s
 
      aws_access_key_id = AKIA4YFAKEKEYXTDS252
 
-     aws_secret_access_key = SH42YMW5p3EThisIsNotRealzTiEUwXN8BOIOF5J8m
+     aws_secret_access_key = SH42YMW5p3EThXN8BOIOF5J8m
 
      region = us-west-2
  
      [account_b]
 
-     aws_access_key_id = AKIA4YFAKEKEYJ7HS98F
+     aws_access_key_id = AKIJ7HS98F
 
-     aws_secret_access_key = Apf938vDKd8ThisIsNotRealzTiEUwXj9nKLWP9mg4
+     aws_secret_access_key = Apf939mg4
 
      ```
  
