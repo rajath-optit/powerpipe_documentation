@@ -882,11 +882,76 @@ sudo docker run -d --name myaccontainer1 \
   powerpipe__steampipe_image
  ```
 
-=================================================================================================================================================================================================================================
-#docker volume and notes on 3 type of volume
+=========================================================================================================================================================
+# docker volume and notes on 3 type of volume
+
+
 Check data peristence on container
 - Test by attaching a data volume to the container and check for persistence of data
  
+===================================================================
+ Docker provides three main types of mounts: **bind mounts**, **volumes**, and **tmpfs mounts**. Each has its specific use case and advantages depending on your requirements for data persistence, isolation, and performance.
+
+### 1. **Bind Mounts**
+   - **Description**: With bind mounts, a file or directory on the host machine is mounted directly into the container. The file or directory must already exist, and Docker does not manage it.
+   - **Usage**: Bind mounts are useful when you need to access and modify data on the host from within the container, such as when you want to share data between the host and the container.
+   - **Example**:
+     ```bash
+     docker run -v /path/on/host:/path/in/container my_image
+     ```
+   - **Pros**:
+     - Gives direct access to host file system.
+     - Good for sharing configurations or working directories between host and container.
+   - **Cons**:
+     - No Docker management of files.
+     - Less portable (specific to the host's directory structure).
+
+---
+
+### 2. **Volume Mounts**
+   - **Description**: Docker volumes are the most common type of mount used for persisting data. Unlike bind mounts, Docker manages volumes, and they are created and stored outside of the container’s writable layer. You don’t need to specify an exact path; Docker abstracts the location.
+   - **Usage**: Volumes are ideal for persisting and sharing data between containers or ensuring that data lives beyond the lifecycle of the container.
+   - **Example**:
+     ```bash
+     docker run -v my_volume:/path/in/container my_image
+     ```
+   - **Pros**:
+     - Managed by Docker (easy to back up, move, or delete).
+     - Data is stored outside the container’s lifecycle.
+     - Can be used across multiple containers.
+   - **Cons**:
+     - Slightly more overhead compared to bind mounts.
+     - Requires Docker management commands for manipulation.
+
+---
+
+### 3. **Tmpfs Mounts**
+   - **Description**: Tmpfs mounts are used for storing non-persistent data in memory (RAM). The data disappears after the container stops. It's best for situations where performance is more critical than persistence, and the data doesn't need to be saved.
+   - **Usage**: Tmpfs is ideal for caching, storing temporary files, or other use cases where data only needs to exist while the container is running.
+   - **Example**:
+     ```bash
+     docker run --mount type=tmpfs,destination=/path/in/container my_image
+     ```
+   - **Pros**:
+     - Extremely fast (data is stored in memory).
+     - No disk I/O overhead.
+   - **Cons**:
+     - Data is lost when the container stops.
+     - Limited by available RAM on the host.
+
+---
+
+### Summary of Use Cases:
+
+- **Bind Mounts**: Use when you need direct access to specific files or directories on the host system. Useful in development environments where you want to share files between the host and the container.
+- **Volume Mounts**: Use when you want persistent, isolated storage for your containers. Ideal for production environments where you need long-term data persistence and Docker-managed storage.
+- **Tmpfs Mounts**: Use when you need temporary, high-speed storage for data that doesn’t need to persist after the container stops.
+
+---
+
+If you are testing **data persistence**, you should be using **volume mounts** as they ensure that data persists beyond the container lifecycle, unlike **tmpfs mounts** (temporary) or **bind mounts** (less isolated and harder to manage).
+
+====================================================================
 use below step "stop and remove running container and then restart by adding -v tag like given below."
 
 sudo mkdir -p /opt/powerpipedata/capitalmind
