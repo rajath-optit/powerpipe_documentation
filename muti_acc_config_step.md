@@ -799,3 +799,139 @@ Imagine you have two AWS accounts, `aws_account_1` and `aws_account_2`, and you 
  
 Using workspaces in Steampipe is the best solution for managing multiple AWS accounts because it provides clear isolation, control, and scalability. This method ensures that each AWS account is managed separately, reducing the risk of errors and making it easier to scale as you add more accounts or need to execute more complex queries. The PowerPipe team likely recommended this approach because it aligns well with best practices for managing multi-account environments in a clear, maintainable way.
  
+=================================================================================================================================================================================================================================
+# nginx
+ ```
+cat  /etc/nginx/nginx.conf
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+include /etc/nginx/modules-enabled/*.conf;
+
+events {
+    worker_connections 768;
+}
+
+http {
+    sendfile on;
+    tcp_nopush on;
+    types_hash_max_size 2048;
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    # Server block for the proxy
+    server {
+        listen 80;
+        server_name 10.10.30.93;
+
+        # Redirect /rajath/account1/powerpipe to the correct IP address and port
+        location /rajath/account1/powerpipe/ {
+            proxy_pass http://10.10.30.93:9040;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        # Redirect /ct/account2/powerpipe to the correct IP address and port
+        location /ct/account2/powerpipe/ {
+            proxy_pass http://10.10.30.93:9041;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        # Redirect 9043 
+        location /Foradian/account3/powerpipe/ {
+            proxy_pass http://10.10.30.93:9043;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        # Redirect /newpath2/account4/steampipe to the new IP address and port 9196
+        location /Foradian/account3/steampipe/ {
+            proxy_pass http://10.10.30.93:9196;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+}
+
+ 
+/opt/powerpipedata/{customer}
+==========================================='''''==========================
+- Check data peristence on container-
+- Test by attaching a data volume to the container and check for persistence of data - 
+/opt/powerpipedata/{customer}
+
+
+sudo docker run -d --name myaccontainer1 \
+  --network my-networkOptit123 \
+  -p 9033:9033 \
+  -p 9194:9194 \
+  -p 9040:9040 \
+  -e AWS_ACCESS_KEY_ID=AK123 \
+  -e AWS_SECRET_ACCESS_KEY=746vw \
+  -v /home/user/.steampipe:/home/powerpipe/.steampipe \
+  -v /var/log/steampipe:/home/powerpipe/.steampipe/logs \
+  powerpipe__steampipe_image
+ ```
+
+=================================================================================================================================================================================================================================
+#docker volume and notes on 3 type of volume
+Check data peristence on container
+- Test by attaching a data volume to the container and check for persistence of data
+ 
+use below step "stop and remove running container and then restart by adding -v tag like given below."
+
+sudo mkdir -p /opt/powerpipedata/capitalmind
+ls /opt/powerpipedata/capitalmind
+ 
+ 
+sudo docker run -d --name myaccontainer1 \
+  --network aws_account1_network \
+  -p 9194:9194 \
+  -p 9040:9040 \
+  -e AWS_ACCESS_KEY_ID= \
+  -e AWS_SECRET_ACCESS_KEY= \
+  -e AWS_REGION=us-east-1 \
+  -v /opt/powerpipedata/capitalmind:/opt/powerpipedata/capitalmind \
+  pp-sp-img
+ 
+ 
+docker exec -it myaccontainer1 /bin/bash
+ 
+#Check Data Persistence:
+ 
+#Enter the container:
+ 
+docker exec -it myaccontainer1 /bin/bash
+Write some data inside /opt/powerpipedata/capitalmind within the container:
+ 
+echo "Test data for persistence" > /opt/powerpipedata/capitalmind/testfile.txt
+ 
+#Restart the Container:
+ 
+#Stop the container:
+ 
+docker stop myaccontainer1
+Start the container again:
+ 
+docker start myaccontainer1
+ 
+#Verify Data Persistence:
+ 
+#Re-enter the container:
+ 
+docker exec -it myaccontainer1 /bin/bash
+Check if the data is still there:
+ 
+cat /opt/powerpipedata/capitalmind/testfile.txt
+===================================================================
+
+we can now follow same for oher services
