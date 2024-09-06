@@ -1,16 +1,16 @@
 TODO:
-- Check data peristence on container- Rajath
-- Test by attaching a data volume to the container and check for persistence of data - Rajath
+- Check data peristence on container- 
+- Test by attaching a data volume to the container and check for persistence of data - 
 /opt/powerpipedata/{customer}
-- Push dockerfile to optitRepo - Bharath
-- Push powerpipe,steampipe container image to registry - Bharath
-- Create bash script to orchestate the new account setup - Bharath
+- Push dockerfile to optitRepo - 
+- Push powerpipe,steampipe container image to registry - 
+- Create bash script to orchestate the new account setup - B
 - Take input - Cloud credentials, CSP, ModName, CustomerName
 - Spinup the new container running on port which is available (9000 -> 9999)
 - Install the required packages and start services
 - Validate the credentials are correct
 - Update NGINX configurations for the new account and restart NGINX
-- Report Analysis - Rajath and Srikanth
+- Report Analysis - 
 - Prioritise the alarms
 - Format the report to be shared with Customer
 Use OauthProxy for authenticating using github id
